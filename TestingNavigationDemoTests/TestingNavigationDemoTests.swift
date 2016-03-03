@@ -10,27 +10,27 @@ import XCTest
 @testable import TestingNavigationDemo
 
 class TestingNavigationDemoTests: XCTestCase {
+  
+  func testTappingPushButton_PushesDetailViewControllerOntoStack() {
+    let viewController = ViewController()
+    let navigationController = MockNavigationController(rootViewController: viewController)
+    UIApplication.sharedApplication().keyWindow?.rootViewController = navigationController
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    guard let view = viewController.view as? View else { XCTFail(); return }
+    view.button.sendActionsForControlEvents(.TouchUpInside)
+    
+    XCTAssertTrue(navigationController.pushedViewController is DetailViewController)
+  }
+  
+  class MockNavigationController: UINavigationController {
+    
+    var pushedViewController: UIViewController?
+    
+    override func pushViewController(viewController: UIViewController, animated: Bool) {
+      pushedViewController = viewController
+      super.pushViewController(viewController, animated: true)
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
+  }
+  
 }
